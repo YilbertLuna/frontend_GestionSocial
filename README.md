@@ -1,6 +1,6 @@
 # Gestion Social
 
-Este es un proyecto para la Gobernacion del Estado Tachira, un avancel del sistema actualizado del sistema actual que se tiene hasta el momento
+Este es un proyecto para la Gobernacion del Estado Tachira, un avance del sistema actualizado del sistema actual que se tiene hasta el momento
 
 ## Getting Started
 
