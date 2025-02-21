@@ -14,7 +14,7 @@ export default function Navbar(){
                 <ul className="flex flex-row space-x-3 divide-x-2    divide-solid divide-black">
                     <li className="px-4">Nombre del usuario</li>
                     <li className="px-4">Departamento</li>
-                    <li className="px-4"><Link href="/login">Salit</Link></li>
+                    <li className="px-4"><Link href="/login">Salir</Link></li>
                 </ul>
             </nav>
         </header>
