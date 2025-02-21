@@ -1,8 +1,10 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Gestion Social
+
+Este es un proyecto para la Gobernacion del Estado Tachira, un avancel del sistema actualizado del sistema actual que se tiene hasta el momento
 
 ## Getting Started
 
-First, run the development server:
+Primero, correr el proyecto en ambiente de desarrollo:
 
 ```bash
 npm run dev
@@ -14,23 +16,17 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrir en [http://localhost:3000](http://localhost:3000) con tu navegador para ver el resultado.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Puedes empezar a editar la pagina partiendo desde el archivo `app/(header)/page.jsx`. la pagina se actualizara a como tu edites los archivo.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Este proyecto utiliza [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) para optimizar y cargar automáticamente [Geist](https://vercel.com/font), una nueva familia de fuentes para Vercel.
 
-## Learn More
+## Leer màs
 
-To learn more about Next.js, take a look at the following resources:
+Para leer mas sobre Next.js, sigue los siguientes recursos
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js Documentation](https://nextjs.org/docs) - lee sobre Next.js features y API.
+- [Learn Next.js](https://nextjs.org/learn) - Un tutorial iterarico de Next.js
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Puedes checkear sobre [the Next.js GitHub repository](https://github.com/vercel/next.js) - tu feadback y contribuciones seran bienvenidas

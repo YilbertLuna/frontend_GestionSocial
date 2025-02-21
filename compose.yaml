@@ -1,0 +1,28 @@
+services:
+  webapp:
+    container_name: gestions_webapp
+    image: gestions_webapp
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./frontend/package.json
+    command: ["npm", "run", "dev"]
+    # env_file:
+      # - ./.env_
+    networks:
+      - webapp_gestionsocial
+
+networks:
+  webapp_gestionsocial:
+    name: webapp_gestionsocial
+    driver: bridge
