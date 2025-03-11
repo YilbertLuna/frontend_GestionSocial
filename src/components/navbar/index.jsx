@@ -1,11 +1,42 @@
 'use client';
 import Link from "next/link";
 import { TiArrowSortedDown } from "react-icons/ti";
+import { useEffect, useState } from "react";
+import ButtomLogout from "../buttomLogout";
+import UserData from "../userData";
 
 export default function Navbar(){
+    const [user, setUser] = useState(null)
+
+    useEffect(() => {
+        async function getInfo() {
+            const res = await fetch('http://localhost:3030/api/hello', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include'  
+            })
+
+            const data = await res.json()
+
+            if(res.ok) {
+                setUser(data)
+            } else {
+                localStorage.removeItem('token')
+                setUser(null)
+            }
+
+            console.log(data)
+        }
+
+        getInfo(); // Llamar a la función getInfo
+    }, [])
+
     return (
         <header className="flex w-full items-center justify-center fixed top-0 py-3 px-4 bg-white text-black">
             <nav className="flex w-full justify-between">
+                
                 <ul className="flex flex-row space-x-3 ml-20">
                     <li className="px-4 relative group">
                         <span className="flex flex-row justify-center items-center gap-2 cursor-pointer">Registro <TiArrowSortedDown className="text-blue-500" /></span>
@@ -33,9 +64,10 @@ export default function Navbar(){
                     <li className="px-4"><Link href="/">Reportes</Link></li>
                 </ul>
                 <ul className="flex flex-row space-x-3 divide-x-2 divide-solid divide-black">
-                    <li className="px-4">Nombre del usuario</li>
-                    <li className="px-4">Departamento</li>
-                    <li className="px-4"><Link href="/login">Salir</Link></li>
+                    {user && (
+                        <UserData nombre={user.nombre} dependencia={user.dependencia_nombre}/>
+                    )}
+                    <li className="px-4"><ButtomLogout/></li>
                 </ul>
             </nav>
         </header>
