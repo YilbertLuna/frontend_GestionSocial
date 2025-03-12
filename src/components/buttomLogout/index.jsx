@@ -15,12 +15,11 @@ export default function ButtomLogout() {
         })
 
         if(res.ok) {
-            setUser(null)
-            router.refresh() // Refrescar la página
+            router.refresh()
         }
     }
 
     return(
-        <span onClick={handleLogout} >Salir</span>
+        <span className="cursor-pointer" onClick={handleLogout} >Salir</span>
     )
 }
