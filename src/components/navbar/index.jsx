@@ -3,7 +3,6 @@ import Link from "next/link";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { useEffect, useState } from "react";
 import ButtomLogout from "../buttomLogout";
-import UserData from "../userData";
 
 export default function Navbar(){
     const [user, setUser] = useState(null)
@@ -19,18 +18,15 @@ export default function Navbar(){
             })
 
             const data = await res.json()
-
             if(res.ok) {
                 setUser(data)
             } else {
                 localStorage.removeItem('token')
                 setUser(null)
             }
-
-            console.log(data)
         }
 
-        getInfo(); // Llamar a la función getInfo
+        getInfo();
     }, [])
 
     return (
@@ -64,9 +60,8 @@ export default function Navbar(){
                     <li className="px-4"><Link href="/">Reportes</Link></li>
                 </ul>
                 <ul className="flex flex-row space-x-3 divide-x-2 divide-solid divide-black">
-                    {user && (
-                        <UserData nombre={user.nombre} dependencia={user.dependencia_nombre}/>
-                    )}
+                    <li className="px-4">{user?.nombre}</li>
+                    <li className="px-4">{user?.dependencia_nombre}</li>
                     <li className="px-4"><ButtomLogout/></li>
                 </ul>
             </nav>

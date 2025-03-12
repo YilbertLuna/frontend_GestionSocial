@@ -11,29 +11,27 @@ export default function FormLoginUser() {
 
     const onSubmit = handleSubmit( async(data) => {
         const res = await fetch(`http://localhost:3030/api/login`, {
-        method: 'POST',
-        headers: {
+          method: 'POST',
+          headers: {
             'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(data)
+          },
+          credentials: 'include',
+          body: JSON.stringify(data)
         })
         const response = await res.json()
-        console.log(response)
 
         if(res.ok) {
-        router.push('/')
+          router.push('/')
         } else {
-        setError(response.message || 'Error en la autenticación')
+          setError(response.message)
         }
-
         router.refresh()
     })
 
     return (
         <form action="" className="flex flex-col p-10 space-y-8 bg-white/50 rounded-md"
             onSubmit={onSubmit}>
-        {error && <p className="text-red-500">Error en la autenticación: {error}</p>}
+        {error && <p className="text-red-500 text-center">{error}</p>}
         <div className="flex flex-col space-y-4">
           <input className={`focus:outline-none p-2 rounded-lg ${errors.username && 'border-red-500'}`} 
                  type="text" placeholder="enter username"
