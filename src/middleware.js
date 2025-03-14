@@ -1,11 +1,22 @@
 import { NextResponse } from "next/server";
+import { jwtVerify } from "jose";
 
-export function middleware(request) {
+export async function middleware(request) {
 
-    const jwt = request.cookies.get('token')
+  const jwt = request.cookies.get('token')
+  if(!jwt) return NextResponse.redirect(new URL('/login', request.url));
 
-    if (jwt) return NextResponse.next()
-    else return NextResponse.redirect(new URL('/login', request.url));
+  try {
+      const { payload, protectedHeader } = await jwtVerify(
+        jwt.value,
+        new TextEncoder().encode(process.env.TOKEN_SECRET)
+      );
+      console.log(payload);
+      console.log(protectedHeader)
+      return NextResponse.next();
+    } catch (error) {
+      return NextResponse.redirect(new URL("/login", request.url));
+  }
 }
 
 export const config = {
