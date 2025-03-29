@@ -30,15 +30,15 @@ export default function Navbar(){
     }, [])
 
     return (
-        <header className="flex w-full items-center justify-center fixed top-0 py-3 px-4 bg-white text-black">
+        <header className="sticky top-0 z-50 bg-white shadow-md py-3 px-4">
             <nav className="flex w-full justify-between">
                 
-                <ul className="flex flex-row space-x-3 ml-20">
+                <ul className="flex flex-row space-x-3 ml-2">
                     <li className="px-4 relative group">
                         <span className="flex flex-row justify-center items-center gap-2 cursor-pointer">Registro <TiArrowSortedDown className="text-blue-500" /></span>
                         <ul className="hidden group-hover:block absolute bg-white shadow-md py-2 w-48 -left-6 rounded-b-md">
                             <li className="px-4 py-2 hover:text-blue-500">
-                                <Link href="/registro/nuevo">Nuevo registro</Link>
+                                <Link href="/registro/nuevo-registro">Nuevo registro</Link>
                             </li>
                             <li className="px-4 py-2 hover:text-blue-500">
                                 <Link href="/registro/busqueda-solicitud">Búsqueda de solicitud</Link>
@@ -59,10 +59,10 @@ export default function Navbar(){
                     <li className="px-4"><Link href="/">Estudio socioeconómico</Link></li>
                     <li className="px-4"><Link href="/">Reportes</Link></li>
                 </ul>
-                <ul className="flex flex-row space-x-3 divide-x-2 divide-solid divide-black">
-                    <li className="px-4">{user?.nombre}</li>
-                    <li className="px-4">{user?.dependencia_nombre}</li>
-                    <li className="px-4"><ButtomLogout/></li>
+                <ul className="flex flex-row divide-x-2 divide-solid divide-black">
+                    <li className="w-auto px-2 text-right"><Link href="/">{user?.nombre}</Link></li>
+                    <li className="w-auto px-2 text-right">{user?.dependencia_nombre}</li>
+                    <li className="px-2"><ButtomLogout/></li>
                 </ul>
             </nav>
         </header>
