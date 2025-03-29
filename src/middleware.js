@@ -11,8 +11,6 @@ export async function middleware(request) {
         jwt.value,
         new TextEncoder().encode(process.env.TOKEN_SECRET)
       );
-      console.log(payload);
-      console.log(protectedHeader)
       return NextResponse.next();
     } catch (error) {
       return NextResponse.redirect(new URL("/login", request.url));
@@ -20,5 +18,8 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: '/'
+  matcher: [
+    '/',
+    '/registro/nuevo-registro'
+  ]
 };
