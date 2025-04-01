@@ -21,7 +21,6 @@ export default function Navbar(){
             if(res.ok) {
                 setUser(data)
             } else {
-                localStorage.removeItem('token')
                 setUser(null)
             }
         }

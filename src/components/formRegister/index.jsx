@@ -9,7 +9,9 @@ import LocationInfo from "./LocationInfo"
 export default function ApplicationForm() {
   const [step, setStep] = useState(1)
   const [isAplicantBeneficiary, setIsAplicantBeneficiary] = useState(true)
-  const [formData, setFormData] = useState({})
+  const [formData, setFormData] = useState({
+    beneficiaryData: ""
+  })
 
   const handleNext = () => setStep(step + 1)
   const handlePrev = () => setStep(step - 1)
@@ -17,6 +19,27 @@ export default function ApplicationForm() {
   const updateFormData = (newData) => {
     setFormData((prevData => ({...prevData, ...newData})))
     console.log(formData)
+  }
+
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch("http://localhost:3030/api/newRegister", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(formData),
+      })
+
+      if (response.ok) {
+        alert("Registro exitoso")
+      } else {
+        alert("Error al registrar")
+      }
+    } catch (error) {
+      alert("Error de red")
+    }
   }
 
   return (
@@ -34,10 +57,19 @@ export default function ApplicationForm() {
           />
         )}
         {step === 3 && !isAplicantBeneficiary &&(
-          <BeneficiaryInfo onNext={handleNext} onPrev={handlePrev} updateFormData={updateFormData} formData={formData}/>
+          <BeneficiaryInfo 
+            onNext={handleNext}
+            onPrev={handlePrev}
+            updateFormData={updateFormData}
+            formData={formData}/>
         )}
         {((step === 3 && isAplicantBeneficiary) || (step === 4 && !isAplicantBeneficiary)) && (
-          <ApplicationInfo onNext={handleNext} onPrev={handlePrev} sendData={updateFormData}/>
+          <ApplicationInfo
+            onNext={handleNext}
+            onPrev={handlePrev}
+            updateFormData={updateFormData}
+            formData={formData} 
+            onSubmit={handleSubmit} />
         )}
       </div>
     </div>

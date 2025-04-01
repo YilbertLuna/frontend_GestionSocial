@@ -1,8 +1,8 @@
-'use client'
-
 import { useState } from "react"
+import TextInput from "../TextInput";
+import SelectInput from "../SelectInput";
 
-export default function ApplicantInfo({onNext, updateFormData, formData}) {
+export default function ApplicantInfo({ onNext, updateFormData, formData }) {
   const [formState, setFormState] = useState({
     dataAplicant: {
       pers_nombres: formData.pers_nombres || "",
@@ -10,135 +10,100 @@ export default function ApplicantInfo({onNext, updateFormData, formData}) {
       pers_document: formData.pers_document || "",
       pers_cedula: formData.pers_cedula || "",
       pers_fec_nac: formData.pers_fec_nac || "",
-      // pers_foto: formData.pers_foto || ""
-    }
-  })
-  const [errors ,setErrors] = useState({})
+    },
+  });
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
       dataAplicant: {
         ...prev.dataAplicant,
-        [name === 'documentType' ? 'pers_document' : 
-         name === 'pers_cedula' ? 'pers_cedula' : name]: value
-      }
+        [name]: value,
+      },
     }));
-  }
-  
+  };
+
   const validateErrors = () => {
-    const newErrors = {}
+    const newErrors = {};
+    if (!formState.dataAplicant.pers_apellidos) newErrors.lastName = "Los apellidos son requeridos";
+    if (!formState.dataAplicant.pers_cedula) newErrors.documentNumber = "El número de documento es requerido";
+    if (!formState.dataAplicant.pers_document) newErrors.typeNumber = "El tipo de documento es requerido";
+    if (!formState.dataAplicant.pers_fec_nac) newErrors.dateOfBirth = "La fecha de nacimiento es requerida";
+    if (!formState.dataAplicant.pers_nombres) newErrors.name = "Los nombres son requeridos";
 
-    if (!formState.dataAplicant.pers_apellidos) newErrors.lastName = "Los apellidos sonrequeridos"
-    if (!formState.dataAplicant.pers_cedula) newErrors.documentNumber = "El numero de documento es requerido"
-    if (!formState.dataAplicant.pers_document) newErrors.typeNumber = "El tipo de documento es requerido"
-    if (!formState.dataAplicant.pers_fec_nac) newErrors.dateOfBirth = "La fecha de nacimiento es requerida"
-    if (!formState.dataAplicant.pers_nombres) newErrors.name = "Los nombres son requeridos"
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(validateErrors()){
+    if (validateErrors()) {
       updateFormData(formState);
-      onNext()
+      onNext();
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <h2 className="text-2xl font-bold mb-6">Parte 1: Informacion del solicitante</h2>
+      <h2 className="text-2xl font-bold mb-6">Parte 1: Información del solicitante</h2>
 
-    <div className="grid grid-cols-4 gap-4">
-        <div className="space-y-2">
-          <label htmlFor="pers_document" className="block text-sm font-medium text-gray-700">
-            Tipo de documento
-          </label>
-          <select
-            id="pers_document"
-            name="pers_document"
-            value={formState.dataAplicant.pers_document}
-            onChange={handleChange}
-            className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.documentType ? "border-red-500" : "border-gray-300"
-            }`}
-          >
-            <option value="">Documento</option>
-            <option value="V">V</option>
-            <option value="E">E</option>
-            <option value="J">J</option>
-            <option value="G">G</option>
-            <option value="P">P</option>
-          </select>
-          {errors.typeNumber && <p className="text-red-500 text-xs">{errors.typeNumber}</p>}
-        </div>
-        <div className="space-y-2 col-span-3">
-          <label htmlFor="pers_cedula" className="block text-sm font-medium text-gray-700">
-            Numero de documento
-          </label>
-          <input
-            id="pers_cedula"
-            name="pers_cedula"
-            type="text"
-            value={formState.dataAplicant.pers_cedula}
-            onChange={handleChange}
-            className="lock w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          {errors.documentNumber && <p className="text-red-500 text-xs">{errors.documentNumber}</p>}
-        </div>
+      <div className="grid grid-cols-2 gap-4">
+        <SelectInput
+          id="pers_document"
+          name="pers_document"
+          label="Tipo de documento"
+          value={formState.dataAplicant.pers_document}
+          onChange={handleChange}
+          options={[
+            { value: "V", label: "V" },
+            { value: "E", label: "E" },
+            { value: "J", label: "J" },
+            { value: "G", label: "G" },
+            { value: "P", label: "P" },
+          ]}
+          error={errors.typeNumber}
+        />
+        <TextInput
+          id="pers_cedula"
+          name="pers_cedula"
+          label="Número de documento"
+          value={formState.dataAplicant.pers_cedula}
+          onChange={handleChange}
+          error={errors.documentNumber}
+          className="col-span-3" // Hace que el campo ocupe 3 columnas
+        />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <label htmlFor="pers_nombres" className="block text-sm font-medium text-gray-700">
-            Nombres
-          </label>
-          <input
-            type="text"
-            id="pers_nombres"
-            name="pers_nombres"
-            value={formState.dataAplicant.pers_nombres}
-            onChange={handleChange}
-            className="block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          {errors.name && <p className="text-red-500 text-xs">{errors.name}</p>}
-        </div>
-
-        <div className="space-y-2">
-          <label htmlFor="pers_apellidos" className="block text-sm font-medium text-gray-700">
-            Apellidos
-          </label>
-          <input
-            type="text"
-            id="pers_apellidos"
-            name="pers_apellidos"
-            value={formState.dataAplicant.pers_apellidos}
-            onChange={handleChange}
-            
-            className="block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            {errors.lastName && <p className="text-red-500 text-xs">{errors.lastName}</p>}
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <label htmlFor="pers_fec_nac" className="block text-sm font-medium text-gray-700">
-          Fecha de nacimiento
-        </label>
-        <input
-          id="pers_fec_nac"
-          name="pers_fec_nac"
-          type="date"
-          value={formState.dataAplicant.pers_fec_nac}
+        <TextInput
+          id="pers_nombres"
+          name="pers_nombres"
+          label="Nombres"
+          value={formState.dataAplicant.pers_nombres}
           onChange={handleChange}
-          
-          className="lock w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          error={errors.name}
         />
-        {errors.dateOfBirth && <p className="text-red-500 text-xs">{errors.dateOfBirth}</p>}
+        <TextInput
+          id="pers_apellidos"
+          name="pers_apellidos"
+          label="Apellidos"
+          value={formState.dataAplicant.pers_apellidos}
+          onChange={handleChange}
+          error={errors.lastName}
+        />
       </div>
+
+      <TextInput
+        id="pers_fec_nac"
+        name="pers_fec_nac"
+        label="Fecha de nacimiento"
+        type="date"
+        value={formState.dataAplicant.pers_fec_nac}
+        onChange={handleChange}
+        error={errors.dateOfBirth}
+      />
 
       <button
         type="submit"
@@ -147,5 +112,5 @@ export default function ApplicantInfo({onNext, updateFormData, formData}) {
         Next
       </button>
     </form>
-  )
+  );
 }
