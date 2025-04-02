@@ -116,19 +116,33 @@ export default function LocationInfo({ onNext, onPrev, updateFormData, formData,
         : {
             dataLocation: {
               ...prev.dataLocation,
-              [name]: value,
+              [name]: ["estado_id", "municipio_id", "parroquia_id"].includes(name)
+                ? Number(value) // Convertir a número si es uno de estos campos
+                : value,
             },
           }),
     }));
   };
+  
   const validateErrors = () => {
     const newErrors = {};
+  
+    if (!formState.dataLocation.estado_id || isNaN(formState.dataLocation.estado_id)) {
+      newErrors.estado_id = "El estado es requerido y debe ser un número";
+    }
 
-    if (!formState.dataLocation.estado_id) newErrors.estado_id = "El estado es requerido";
-    if (!formState.dataLocation.municipio_id) newErrors.municipio_id = "El municipio es requerido";
-    if (!formState.dataLocation.parroquia_id) newErrors.parroquia_id = "La parroquia es requerida";
-    if (!formState.dataLocation.Direccion) newErrors.Direccion = "La dirección es requerida";
+    if (!formState.dataLocation.municipio_id || isNaN(formState.dataLocation.municipio_id)) {
+      newErrors.municipio_id = "El municipio es requerido y debe ser un número";
+    }
 
+    if (!formState.dataLocation.parroquia_id || isNaN(formState.dataLocation.parroquia_id)) {
+      newErrors.parroquia_id = "La parroquia es requerida y debe ser un número";
+    }
+    
+    if (!formState.dataLocation.Direccion) {
+      newErrors.Direccion = "La dirección es requerida";
+    }
+  
     const hasContactInfo =
       formState.dataLocation.TelefonoFijo.trim() ||
       formState.dataLocation.TelefonoCelular.trim() ||

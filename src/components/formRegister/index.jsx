@@ -10,7 +10,13 @@ export default function ApplicationForm() {
   const [step, setStep] = useState(1)
   const [isAplicantBeneficiary, setIsAplicantBeneficiary] = useState(true)
   const [formData, setFormData] = useState({
-    beneficiaryData: ""
+    aplicationData: {},
+    beneficiaryData: {},
+    dataAplicant: {},
+    dataLocation: {},
+    isAplicantBeneficiary: "",
+    requeriments: {}
+
   })
 
   const handleNext = () => setStep(step + 1)

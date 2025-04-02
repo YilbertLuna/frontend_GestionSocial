@@ -10,6 +10,7 @@ export default function ApplicantInfo({ onNext, updateFormData, formData }) {
       pers_document: formData.pers_document || "",
       pers_cedula: formData.pers_cedula || "",
       pers_fec_nac: formData.pers_fec_nac || "",
+      pers_foto: "foto",
     },
   });
   const [errors, setErrors] = useState({});

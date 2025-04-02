@@ -7,15 +7,15 @@ import SelectInput from '../SelectInput';
 export default function BeneficiaryInfo({ onNext, onPrev, updateFormData, formData }) {
   const [formState, setFormState] = useState({
     beneficiaryData: {
-      benf_nombres: formData.benf_nombres || '',
-      benf_apellidos: formData.benf_apellidos || '',
-      benf_cedula: formData.benf_cedula || '',
-      benf_direccion: formData.benf_direccion || '',
-      benf_parroquia: formData.benf_parroquia || '',
-      benf_municipio: formData.benf_municipio || '',
-      benf_estado: formData.benf_estado || '',
-      benf_fec_nac: formData.benf_fec_nac || '',
-      benf_document: formData.benf_document || '',
+      benf_nombres: formData.benf_nombres || "",
+      benf_apellidos: formData.benf_apellidos || "",
+      benf_cedula: formData.benf_cedula || "",
+      benf_direccion: formData.benf_direccion || "",
+      benf_parroquia: formData.benf_parroquia || "",
+      benf_municipio: formData.benf_municipio || "",
+      benf_estado: formData.benf_estado || "",
+      benf_fec_nac: formData.benf_fec_nac || "",
+      benf_document: formData.benf_document || "",
     },
   });
 
@@ -121,31 +121,63 @@ export default function BeneficiaryInfo({ onNext, onPrev, updateFormData, formDa
       ...prev,
       beneficiaryData: {
         ...prev.beneficiaryData,
-        [name]: value,
+        [name]: ["benf_estado", "benf_municipio", "benf_parroquia"].includes(name)
+          ? Number(value) // Convertir a número si es uno de estos campos
+          : value,
       },
     }));
   };
-
+  
   const validateErrors = () => {
     const newErrors = {};
-
-    if (!formState.beneficiaryData.benf_document) newErrors.beneficiaryDocumentType = 'El tipo de documento es requerido';
-    if (!formState.beneficiaryData.benf_cedula) newErrors.beneficiaryDocumentNumber = 'El número de documento es requerido';
-
-    if (isInstitution) {
-      if (!formState.beneficiaryData.benf_nombres) newErrors.institutionName = 'El nombre de la institución es requerido';
-      if (!formState.beneficiaryData.benf_apellidos) newErrors.legalRepresentative = 'El nombre del representante legal es requerido';
-    } else {
-      if (!formState.beneficiaryData.benf_nombres) newErrors.beneficiaryFirstName = 'Los nombres son requeridos';
-      if (!formState.beneficiaryData.benf_apellidos) newErrors.beneficiaryLastName = 'Los apellidos son requeridos';
-      if (!formState.beneficiaryData.benf_fec_nac) newErrors.beneficiaryDateOfBirth = 'La fecha de nacimiento es requerida';
+  
+    if (!formState.beneficiaryData.benf_document) {
+      newErrors.beneficiaryDocumentType = "El tipo de documento es requerido";
     }
 
-    if (!formState.beneficiaryData.benf_estado) newErrors.beneficiaryState = 'El estado de residencia es requerido';
-    if (!formState.beneficiaryData.benf_municipio) newErrors.beneficiaryMunicipality = 'El municipio es requerido';
-    if (!formState.beneficiaryData.benf_parroquia) newErrors.beneficiaryParish = 'La parroquia es requerida';
-    if (!formState.beneficiaryData.benf_direccion) newErrors.beneficiaryAddress = 'La dirección es requerida';
+    if (!formState.beneficiaryData.benf_cedula) {
+      newErrors.beneficiaryDocumentNumber = "El número de documento es requerido";
+    }
+  
+    if (isInstitution) {
+      if (!formState.beneficiaryData.benf_nombres) {
+        newErrors.institutionName = "El nombre de la institución es requerido";
+      }
 
+      if (!formState.beneficiaryData.benf_apellidos) {
+        newErrors.legalRepresentative = "El nombre del representante legal es requerido";
+      }
+
+    } else {
+
+      if (!formState.beneficiaryData.benf_nombres) {
+        newErrors.beneficiaryFirstName = "Los nombres son requeridos";
+      }
+      
+      if (!formState.beneficiaryData.benf_apellidos) {
+        newErrors.beneficiaryLastName = "Los apellidos son requeridos";
+      }
+
+      if (!formState.beneficiaryData.benf_fec_nac) {
+        newErrors.beneficiaryDateOfBirth = "La fecha de nacimiento es requerida";
+      }
+    }
+  
+    if (!formState.beneficiaryData.benf_estado || isNaN(formState.beneficiaryData.benf_estado)) {
+      newErrors.beneficiaryState = "El estado de residencia es requerido y debe ser un número";
+    }
+
+    if (!formState.beneficiaryData.benf_municipio || isNaN(formState.beneficiaryData.benf_municipio)) {
+      newErrors.beneficiaryMunicipality = "El municipio es requerido y debe ser un número";
+    }
+    if (!formState.beneficiaryData.benf_parroquia || isNaN(formState.beneficiaryData.benf_parroquia)) {
+      newErrors.beneficiaryParish = "La parroquia es requerida y debe ser un número";
+    }
+    
+    if (!formState.beneficiaryData.benf_direccion) {
+      newErrors.beneficiaryAddress = "La dirección es requerida";
+    }
+  
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

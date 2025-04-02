@@ -56,27 +56,27 @@ export default function ApplicationInfo({ onPrev, updateFormData, formData, onSu
 
   const validateErrors = () => {
     const newErrors = {};
-
+  
     if (!selectArea.id_area || selectArea.id_area.trim() === "") {
       newErrors.area = "Debe seleccionar un área.";
     }
-
+  
     if (!selectHelp.id_ayuda || selectHelp.id_ayuda.trim() === "") {
       newErrors.assistanceType = "Debe seleccionar un tipo de ayuda.";
     }
-
+  
     if (!formState.aplicationData.referido || formState.aplicationData.referido.trim() === "") {
       newErrors.referido = "Debe indicar si la persona viene referida.";
     }
-
-    if (!formState.aplicationData.monto || parseFloat(formState.aplicationData.monto) <= 0) {
+  
+    if (!formState.aplicationData.monto || isNaN(formState.aplicationData.monto) || parseFloat(formState.aplicationData.monto) <= 0) {
       newErrors.monto = "Debe ingresar un monto válido.";
     }
-
+  
     if (!formState.aplicationData.description || formState.aplicationData.description.trim() === "") {
       newErrors.description = "Debe proporcionar una descripción de la ayuda.";
     }
-
+  
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -88,10 +88,17 @@ export default function ApplicationInfo({ onPrev, updateFormData, formData, onSu
       const processedRequeriments = requeriments.map((data) => ({
         ...data,
         estatus: formState.requeriments[data.requ_id]?.estatus || "U",
+        depe_id: user.dependencia_id,
+        id_area: selectArea.id_area,
+        id_ayuda: selectHelp.id_ayuda,
       }));
 
       const updatedFormState = {
         ...formState,
+        aplicationData: {
+          ...formState.aplicationData,
+          monto: parseFloat(formState.aplicationData.monto), // Asegurarse de que sea un número
+        },
         requeriments: processedRequeriments,
       };
 
