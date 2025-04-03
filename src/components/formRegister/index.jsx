@@ -1,10 +1,12 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import ApplicationInfo from "./ApplicationInfo"
 import ApplicantInfo from "./AplicantInfo"
 import BeneficiaryInfo from "./BeneficiaryInfo"
 import LocationInfo from "./LocationInfo"
+import ModalRegisterSucess from "../modal/modalRegisterSucess"
 
 export default function ApplicationForm() {
   const [step, setStep] = useState(1)
@@ -16,8 +18,10 @@ export default function ApplicationForm() {
     dataLocation: {},
     isAplicantBeneficiary: "",
     requeriments: {}
-
   })
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const router = useRouter()
 
   const handleNext = () => setStep(step + 1)
   const handlePrev = () => setStep(step - 1)
@@ -39,13 +43,18 @@ export default function ApplicationForm() {
       })
 
       if (response.ok) {
-        alert("Registro exitoso")
+        setIsModalOpen(true)
       } else {
         alert("Error al registrar")
       }
     } catch (error) {
       alert("Error de red")
     }
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    router.push("/")
   }
 
   return (
@@ -76,6 +85,10 @@ export default function ApplicationForm() {
             updateFormData={updateFormData}
             formData={formData} 
             onSubmit={handleSubmit} />
+        )}
+
+        {isModalOpen && (
+          <ModalRegisterSucess closeModal={closeModal} />
         )}
       </div>
     </div>

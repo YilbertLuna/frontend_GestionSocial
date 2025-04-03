@@ -29,7 +29,7 @@ export default function Navbar(){
     }, [])
 
     return (
-        <header className="sticky top-0 z-50 bg-white shadow-md py-3 px-4">
+        <header className="sticky w-full top-0 z-50 bg-white shadow-md py-3 px-4">
             <nav className="flex w-full justify-between">
                 
                 <ul className="flex flex-row space-x-3 ml-2">
