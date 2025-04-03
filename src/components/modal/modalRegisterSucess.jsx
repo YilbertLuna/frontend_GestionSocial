@@ -11,6 +11,6 @@ export default function ModalRegisterSucess ({closeModal}) {
                 Cerrar
               </button>
             </div>
-          </div>
+        </div>
     )
 }
