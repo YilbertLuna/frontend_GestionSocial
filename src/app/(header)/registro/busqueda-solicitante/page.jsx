@@ -1,5 +1,7 @@
 'use client'
 
+import Search from "@/components/searchForm"
+import InfoCard from "@/components/inforCard"
 import { useState, useEffect, useRef } from "react"
 
 export default function BuscarPersonas() {
@@ -19,7 +21,7 @@ export default function BuscarPersonas() {
       setInputValue(String(userSearch.current?.value))
   }
 
-      useEffect(() => {
+   useEffect(() => {
      async function searchPerson() {
        if (!inputValue || inputValue.trim() === "") {
          setPersons(null);
@@ -57,69 +59,44 @@ export default function BuscarPersonas() {
      searchPerson();
    }, [inputValue]);
 
+   const transformField = (field, value) => {
+      if (field === "tipo_persona_tipo_pers_id") {
+         if(value === 1) return "Solicitante"
+         else if(value === 2) return "Beneficiario"
+      }
+      return value;
+   };
+
    return (
       <div className="container mx-auto py-8 space-y-10">
          <h1 className="text-center text-4xl font-bold text-white">Busqueda de solicitante</h1>
 
          <div>
-            <form onSubmit={ e => {
-               e.preventDefault()
-               submitInputValue()
-            }} className="flex flex-row items-center justify-center w-full">
-               <div className="flex bg-white border rounded-lg gap-3 p-3">
-                  <div className="felx justify-center items-center w-full">
-                     <input
-                        ref={userSearch}
-                        className="w-[340px] border rounded-lg p-3 focus:outline-none"
-                        type="text" 
-                        placeholder="Busca a la persona por nombre o por cedula"/>
-                  </div>
-                  {empiti && <p className="text-red-500 text-xs">Ingresa un dato</p>}
-                  {errorMessage && <p className="text-red-500 text-xs">{errorMessage}</p>} 
-                  <div className="flex justify-center items-center">
-                     <button
-                        type="submit" 
-                        className="border border-gray-300 rounded-lg p-3">
-                        Buscar
-                     </button>
-                  </div>
-               </div>
-            </form>
+            <Search
+               submitInputValue={submitInputValue}
+               search={userSearch}
+               empiti={empiti}
+               errorMessage={errorMessage}
+               />
          </div>
-
 
          <div className="flex flex-col justify-center items-center space-y-4 w-full">
-            {
-               persons?.map((person, index) => {
-               const { pers_nombres, pers_apellidos, pers_cedula, tipo_persona_tipo_pers_id } = person;
-               return (
-                  <div 
-                     key={index} 
-                     className="flex justify-between items-center w-full max-w-2xl bg-white shadow-md rounded-lg p-4 border"
-                  >
-                     <span className="font-medium text-gray-700">{pers_apellidos}</span>
-                     <span className="font-medium text-gray-700">{pers_nombres}</span>
-                     <span className="font-medium text-gray-700">{pers_cedula}</span>
-                     <span 
-                     className={`font-medium ${
-                        tipo_persona_tipo_pers_id === 1 
-                           ? "text-blue-500 bg-blue-100 px-2 py-1 rounded" 
-                           : tipo_persona_tipo_pers_id === 2 
-                           ? "text-green-500 bg-green-100 px-2 py-1 rounded" 
-                           : "text-gray-500 bg-gray-100 px-2 py-1 rounded"
-                     }`}
-                     >
-                     {tipo_persona_tipo_pers_id === 1 
-                        ? "Solicitante" 
-                        : tipo_persona_tipo_pers_id === 2 
-                        ? "Beneficiario" 
-                        : "Desconocido"}
-                     </span>
-                  </div>
-               );
-               })
-            }
-         </div>
+            {persons?.map((person, index) => (
+               <InfoCard
+                  key={index}
+                  data={person}
+                  fields={["pers_apellidos", "pers_nombres", "pers_cedula", "tipo_persona_tipo_pers_id"]}
+                  styles={{
+                     tipo_persona_tipo_pers_id: person.tipo_persona_tipo_pers_id === 1
+                           ? "text-blue-500 bg-blue-100 px-2 py-1 rounded"
+                           : person.tipo_persona_tipo_pers_id === 2
+                           ? "text-green-500 bg-green-100 px-2 py-1 rounded"
+                           : "",
+                  }}
+                  transformField={transformField}
+               />
+            ))}
+        </div>
       </div>
    )
 }
