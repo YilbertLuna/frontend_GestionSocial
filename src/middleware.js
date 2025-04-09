@@ -20,6 +20,7 @@ export async function middleware(request) {
 export const config = {
   matcher: [
     '/',
-    '/registro/nuevo-registro'
+    '/registro/nuevo-registro',
+    '/registro/busqueda-solicitante'
   ]
 };
