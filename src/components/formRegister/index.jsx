@@ -7,6 +7,7 @@ import ApplicantInfo from "./AplicantInfo"
 import BeneficiaryInfo from "./BeneficiaryInfo"
 import LocationInfo from "./LocationInfo"
 import ModalRegisterSucess from "../modal/modalRegisterSucess"
+import ModalError from "../modal/ModalError"
 
 export default function ApplicationForm() {
   const [step, setStep] = useState(1)
@@ -19,7 +20,7 @@ export default function ApplicationForm() {
     isAplicantBeneficiary: "",
     requeriments: {}
   })
-
+  const [errorMessage, setErrorMessage] = useState("")
   const [isModalOpen, setIsModalOpen] = useState(false)
   const router = useRouter()
 
@@ -27,9 +28,11 @@ export default function ApplicationForm() {
   const handlePrev = () => setStep(step - 1)
 
   const updateFormData = (newData) => {
-    setFormData((prevData => ({...prevData, ...newData})))
-    console.log(formData)
-  }
+    setFormData((prevData) => {
+      const updatedData = { ...prevData, ...newData }
+      return updatedData;
+    });
+  };
 
   const handleSubmit = async () => {
     try {
@@ -44,8 +47,10 @@ export default function ApplicationForm() {
 
       if (response.ok) {
         setIsModalOpen(true)
+        setErrorMessage("")
       } else {
-        alert("Error al registrar")
+        const errorData = await response.json()
+        setErrorMessage(errorData.message || "Error al registrar")
       }
     } catch (error) {
       alert("Error de red")
@@ -60,7 +65,6 @@ export default function ApplicationForm() {
   return (
     <div className="w-full max-w-4xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
       <div className="p-6">
-
         {step === 1 && <ApplicantInfo onNext={handleNext} updateFormData={updateFormData} formData={formData}/>}
         {step === 2 && (
           <LocationInfo
@@ -72,7 +76,7 @@ export default function ApplicationForm() {
           />
         )}
         {step === 3 && !isAplicantBeneficiary &&(
-          <BeneficiaryInfo 
+          <BeneficiaryInfo
             onNext={handleNext}
             onPrev={handlePrev}
             updateFormData={updateFormData}
@@ -83,12 +87,18 @@ export default function ApplicationForm() {
             onNext={handleNext}
             onPrev={handlePrev}
             updateFormData={updateFormData}
-            formData={formData} 
+            formData={formData}
             onSubmit={handleSubmit} />
         )}
 
         {isModalOpen && (
           <ModalRegisterSucess closeModal={closeModal} />
+        )}
+        {errorMessage && (
+          <ModalError
+            errorMessage={errorMessage}
+            closeModal={() => setErrorMessage("")}
+          />
         )}
       </div>
     </div>

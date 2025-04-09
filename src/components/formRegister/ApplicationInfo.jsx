@@ -12,7 +12,7 @@ export default function ApplicationInfo({ onPrev, updateFormData, formData, onSu
     },
     requeriments: {},
   });
-
+  const [readyToSubmit, setReadyToSubmit] = useState(false);
   const [user, setUser] = useState(null);
   const [area, setArea] = useState(null);
   const [help, setHelp] = useState(null);
@@ -79,32 +79,6 @@ export default function ApplicationInfo({ onPrev, updateFormData, formData, onSu
   
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (validateErrors()) {
-      const processedRequeriments = requeriments.map((data) => ({
-        ...data,
-        estatus: formState.requeriments[data.requ_id]?.estatus || "U",
-        depe_id: user.dependencia_id,
-        id_area: selectArea.id_area,
-        id_ayuda: selectHelp.id_ayuda,
-      }));
-
-      const updatedFormState = {
-        ...formState,
-        aplicationData: {
-          ...formState.aplicationData,
-          monto: parseFloat(formState.aplicationData.monto), // Asegurarse de que sea un número
-        },
-        requeriments: processedRequeriments,
-      };
-
-      updateFormData(updatedFormState);
-      onSubmit()
-    }
   };
 
   useEffect(() => {
@@ -239,6 +213,40 @@ export default function ApplicationInfo({ onPrev, updateFormData, formData, onSu
       getRequeriments();
     }
   }, [selectHelp, selectArea]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (validateErrors()) {
+      const processedRequeriments = requeriments.map((data) => ({
+        ...data,
+        estatus: formState.requeriments[data.requ_id]?.estatus || "U",
+        depe_id: user.dependencia_id,
+        id_area: selectArea.id_area,
+        id_ayuda: selectHelp.id_ayuda,
+      }));
+
+      const updatedFormState = {
+        ...formState,
+        aplicationData: {
+          ...formState.aplicationData,
+          monto: parseFloat(formState.aplicationData.monto),
+        },
+        requeriments: processedRequeriments,
+      };
+
+      updateFormData(updatedFormState);
+      setReadyToSubmit(true);
+    }
+  };
+
+  useEffect(() => {
+    if (readyToSubmit) {
+      onSubmit();
+      setReadyToSubmit(false);
+    }
+    console.log(readyToSubmit)
+  }, [readyToSubmit, onSubmit]);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
