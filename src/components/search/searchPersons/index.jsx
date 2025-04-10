@@ -1,0 +1,99 @@
+"use client"
+
+import Search from "@/components/searchForm"
+import InfoCard from "@/components/inforCard"
+import { useState, useEffect, useRef } from "react"
+
+export default function SearchPersons() {
+
+    const [inputValue, setInputValue] = useState(null)
+    const [persons, setPersons] = useState(null)
+    const [empiti, setEmpiti] = useState(false)
+    const userSearch = useRef(null)
+    const [errorMessage, setErrorMessage] = useState("")
+ 
+    function submitInputValue() {
+       if(userSearch.current?.value.trim() === "" || userSearch.current?.value === undefined){
+            setEmpiti(true)
+            setPersons(null)
+            return
+       }
+       setEmpiti(false)
+       setInputValue(String(userSearch.current?.value))
+    }
+ 
+    useEffect(() => {
+      async function searchPerson() {
+            if (!inputValue || inputValue.trim() === "") {
+                setPersons(null);
+                setErrorMessage("");
+                return;
+            }
+        
+            try {
+                const response = await fetch("http://localhost:3030/api/searchPersons", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({
+                        person: inputValue,
+                    }),
+                });
+            
+                const data = await response.json();
+            
+                if (response.ok) {
+                    setErrorMessage("");
+                    setPersons(data);
+                } else {
+                    setPersons(null);
+                    setErrorMessage(data.message || "No se encontró la persona.");
+                }
+            } catch (error) {
+                setPersons(null);
+                setErrorMessage("Error de red. Intenta nuevamente.");
+            }
+        }
+    
+      searchPerson();
+    }, [inputValue]);
+
+    const transformField = (field, value) => {
+        if (field === "tipo_persona_tipo_pers_id") {
+           if(value === 1) return "Solicitante"
+           else if(value === 2) return "Beneficiario"
+        }
+        return value;
+    };
+
+    return (
+        <>
+            <Search
+                submitInputValue={submitInputValue}
+                search={userSearch}
+                empiti={empiti}
+                errorMessage={errorMessage}
+            />
+
+            <div className="flex flex-col justify-center items-center space-y-4 w-full">
+                {persons?.map((person, index) => (
+                    <InfoCard
+                        key={index}
+                        data={person}
+                        fields={["pers_apellidos", "pers_nombres", "pers_cedula", "tipo_persona_tipo_pers_id"]}
+                        styles={{
+                            tipo_persona_tipo_pers_id: person.tipo_persona_tipo_pers_id === 1
+                                ? "text-blue-500 bg-blue-100 px-2 py-1 rounded"
+                                : person.tipo_persona_tipo_pers_id === 2
+                                ? "text-green-500 bg-green-100 px-2 py-1 rounded"
+                                : "",
+                        }}
+                        transformField={transformField}
+                    />
+                ))}
+            </div>
+        </>
+    )
+}
