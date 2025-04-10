@@ -245,7 +245,6 @@ export default function ApplicationInfo({ onPrev, updateFormData, formData, onSu
       onSubmit();
       setReadyToSubmit(false);
     }
-    console.log(readyToSubmit)
   }, [readyToSubmit, onSubmit]);
 
   return (
