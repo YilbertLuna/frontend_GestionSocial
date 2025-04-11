@@ -3,6 +3,7 @@
 import Search from "@/components/searchForm"
 import InfoCard from "@/components/inforCard"
 import { useState, useEffect, useRef } from "react"
+import { usePathname } from "next/navigation"
 
 export default function SearchPersons() {
 
@@ -11,6 +12,7 @@ export default function SearchPersons() {
     const [empiti, setEmpiti] = useState(false)
     const userSearch = useRef(null)
     const [errorMessage, setErrorMessage] = useState("")
+    const pathname = usePathname()
  
     function submitInputValue() {
        if(userSearch.current?.value.trim() === "" || userSearch.current?.value === undefined){
@@ -75,6 +77,7 @@ export default function SearchPersons() {
                 search={userSearch}
                 empiti={empiti}
                 errorMessage={errorMessage}
+                placeholder="Buscar por cedula, nombre o apellido"
             />
 
             <div className="flex flex-col justify-center items-center space-y-4 w-full">
@@ -91,6 +94,7 @@ export default function SearchPersons() {
                                 : "",
                         }}
                         transformField={transformField}
+                        pathname={pathname}
                     />
                 ))}
             </div>

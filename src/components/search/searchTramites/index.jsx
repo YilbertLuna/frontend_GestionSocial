@@ -3,6 +3,7 @@
 import Search from "@/components/searchForm"
 import InfoCard from "@/components/inforCard"
 import { useState, useEffect, useRef } from "react"
+import { usePathname } from "next/navigation"
 
 export default function SearchTramites() {
     const [inputValue, setInputValue] = useState(null)
@@ -10,7 +11,8 @@ export default function SearchTramites() {
     const [empiti, setEmpiti] = useState(false)
     const userSearch = useRef(null)
     const [errorMessage, setErrorMessage] = useState("")
- 
+    const pathname = usePathname()
+
     function submitInputValue() {
        if(userSearch.current?.value.trim() === "" || userSearch.current?.value === undefined){
           setEmpiti(true)
@@ -75,22 +77,24 @@ export default function SearchTramites() {
                 search={userSearch}
                 empiti={empiti}
                 errorMessage={errorMessage}
-                />
+                placeholder="Buscar por numero de tramite, cedula o nombre"
+            />
 
             <div className="flex flex-col justify-center items-center space-y-4 w-full">
-                {tramites?.map((person, index) => (
+                {tramites?.map((tramite, index) => (
                     <InfoCard
                         key={index}
-                        data={person}
+                        data={tramite}
                         fields={["nro_tramite", "pers_apellidos", "pers_nombres", "pers_cedula", "persona_tipo_pers_id"]}
                         styles={{
-                        persona_tipo_pers_id: person.persona_tipo_pers_id === 1
+                        persona_tipo_pers_id: tramite.persona_tipo_pers_id === 1
                                 ? "text-blue-500 bg-blue-100 px-2 py-1 rounded"
-                                : person.persona_tipo_pers_id === 2
+                                : tramite.persona_tipo_pers_id === 2
                                 ? "text-green-500 bg-green-100 px-2 py-1 rounded"
                                 : "",
                         }}
                         transformField={transformField}
+                        pathname={pathname}
                     />
                 ))}
             </div>
