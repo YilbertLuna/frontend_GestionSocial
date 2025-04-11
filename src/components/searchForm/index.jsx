@@ -1,4 +1,4 @@
-export default function Search ({submitInputValue, search, empiti, errorMessage}) {
+export default function Search ({submitInputValue, search, empiti, errorMessage, placeholder}) {
     return (
         <form onSubmit={ e => {
             e.preventDefault()
@@ -10,7 +10,7 @@ export default function Search ({submitInputValue, search, empiti, errorMessage}
                      ref={search}
                      className="w-[340px] border rounded-lg p-3 focus:outline-none"
                      type="text" 
-                     placeholder="Busca a la persona por nombre o por cedula"/>
+                     placeholder={placeholder}/>
                </div>
                {empiti && <p className="text-red-500 text-xs">Ingresa un dato</p>}
                {errorMessage && <p className="text-red-500 text-xs">{errorMessage}</p>} 
