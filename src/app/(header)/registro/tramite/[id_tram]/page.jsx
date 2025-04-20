@@ -2,25 +2,35 @@
 
 import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
+import Loading from "@/components/loading";
 
 export default function SearchProcess() {
    const { id_tram } = useParams();
    const [dataTramite, setDataTramite] = useState(null);
+   const [loading, setLoading] = useState(true);
+   const [error, setError] = useState(null);
 
    useEffect(() => {
       async function getDataTramite() {
-         const response = await fetch(`http://localhost:3030/api/showDataProcess/${id_tram}`, {
-            method: "GET",
-            headers: {
-               "Content-Type": "application/json",
-            },
-            credentials: "include",
-         });
-
-         const data = await response.json();
-
-         if (response.ok) {
+         try {
+            setLoading(true);
+            const response = await fetch(`http://localhost:3030/api/showDataProcess/${id_tram}`, {
+               method: "GET",
+               headers: {
+                  "Content-Type": "application/json",
+               },
+               credentials: "include",
+               }
+            );
+            if (!response.ok) {
+               throw new Error(`Error: ${response.status}`);
+            }
+            const data = await response.json();
             setDataTramite(data);
+         } catch (err) {
+            setError(err.message);
+         } finally {
+            setLoading(false);
          }
       }
 
@@ -28,9 +38,28 @@ export default function SearchProcess() {
          getDataTramite();
       }
    }, [id_tram]);
+   
+   if (loading) {
+      return (
+         <Loading text={"Cargando..."}/>
+      );
+   }
 
-   console.log(dataTramite)
+   if (error) {
+      return (
+         <div className="flex w-full max-w-4xl mx-auto bg-white shadow-md rounded-lg overflow-hidden p-11">
+            <p className="text-red-500">Error: {error}</p>
+         </div>
+      );
+   }
 
+   if (!dataTramite) {
+      return (
+         <div className="flex w-full max-w-4xl mx-auto bg-white shadow-md rounded-lg overflow-hidden p-11">
+            <p>No se encontraron datos.</p>
+         </div>
+      );
+   }
 
    return (
       <div className="container mx-auto py-8 space-y-10">
