@@ -106,7 +106,7 @@ export default function TramiteItem({ tramite, isExpanded, onToggle }) {
                     {tramite.area_descripcion || "N/A"}
                 </p>
                 <p className="text-sm text-gray-600">
-                    <span className="font-medium">Area:</span>{" "}
+                    <span className="font-medium">Ayuda:</span>{" "}
                     {tramite.serv_descripcion || "N/A"}
                 </p>
             </div>
