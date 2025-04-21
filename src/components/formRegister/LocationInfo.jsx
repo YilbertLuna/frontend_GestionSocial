@@ -222,7 +222,7 @@ export default function LocationInfo({ onNext, onPrev, updateFormData, formData,
           id="TelefonoFijo"
           name="TelefonoFijo"
           label="Teléfono de casa"
-          type="tel"
+          type="number"
           value={formState.dataLocation.TelefonoFijo}
           onChange={handleChange}
           error={errors.contacto}
@@ -231,7 +231,7 @@ export default function LocationInfo({ onNext, onPrev, updateFormData, formData,
           id="TelefonoCelular"
           name="TelefonoCelular"
           label="Teléfono celular"
-          type="tel"
+          type="number"
           value={formState.dataLocation.TelefonoCelular}
           onChange={handleChange}
           error={errors.contacto}
