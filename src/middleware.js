@@ -21,5 +21,6 @@ export const config = {
   matcher: [
     '/',
     '/registro/:path*',
+    '/estatus/:path*'
   ]
 };
