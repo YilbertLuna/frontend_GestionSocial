@@ -6,7 +6,7 @@ import ApplicationInfo from "./ApplicationInfo"
 import ApplicantInfo from "./AplicantInfo"
 import BeneficiaryInfo from "./BeneficiaryInfo"
 import LocationInfo from "./LocationInfo"
-import ModalRegisterSucess from "../modal/modalRegisterSucess"
+import ModalSucess from "../modal/modalRegisterSucess"
 import ModalError from "../modal/ModalError"
 
 export default function ApplicationForm() {
@@ -92,7 +92,7 @@ export default function ApplicationForm() {
         )}
 
         {isModalOpen && (
-          <ModalRegisterSucess closeModal={closeModal} />
+          <ModalSucess closeModal={closeModal} title={"Registro completado"} message={"El registro se ha completado con éxito."}/>
         )}
         {errorMessage && (
           <ModalError
