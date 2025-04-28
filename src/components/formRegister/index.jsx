@@ -24,14 +24,23 @@ export default function ApplicationForm() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const router = useRouter()
 
-  const handleNext = () => setStep(step + 1)
-  const handlePrev = () => setStep(step - 1)
+  const handleNext = (currentStepData) => {
+    updateFormData(currentStepData);
+    setStep(step + 1);
+  };
+  
+  const handlePrev = (currentStepData) => {
+    updateFormData(currentStepData);
+    setStep(step - 1);
+  };
 
   const updateFormData = (newData) => {
     setFormData((prevData) => {
       const updatedData = { ...prevData, ...newData }
       return updatedData;
     });
+
+    console.log(formData)
   };
 
   const handleSubmit = async () => {

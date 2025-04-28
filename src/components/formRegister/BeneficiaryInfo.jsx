@@ -7,15 +7,15 @@ import SelectInput from '../SelectInput';
 export default function BeneficiaryInfo({ onNext, onPrev, updateFormData, formData }) {
   const [formState, setFormState] = useState({
     beneficiaryData: {
-      benf_nombres: formData.benf_nombres || "",
-      benf_apellidos: formData.benf_apellidos || "",
-      benf_cedula: formData.benf_cedula || "",
-      benf_direccion: formData.benf_direccion || "",
-      benf_parroquia: formData.benf_parroquia || "",
-      benf_municipio: formData.benf_municipio || "",
-      benf_estado: formData.benf_estado || "",
-      benf_fec_nac: formData.benf_fec_nac || "",
-      benf_document: formData.benf_document || "",
+      benf_nombres: formData.beneficiaryData?.benf_nombres || "",
+      benf_apellidos: formData.beneficiaryData?.benf_apellidos || "",
+      benf_cedula: formData.beneficiaryData?.benf_cedula || "",
+      benf_direccion: formData.beneficiaryData?.benf_direccion || "",
+      benf_parroquia: formData.beneficiaryData?.benf_parroquia || "",
+      benf_municipio: formData.beneficiaryData?.benf_municipio || "",
+      benf_estado: formData.beneficiaryData?.benf_estado || "",
+      benf_fec_nac: formData.beneficiaryData?.benf_fec_nac || "",
+      benf_document: formData.beneficiaryData?.benf_document || "",
     },
   });
 
@@ -77,8 +77,8 @@ export default function BeneficiaryInfo({ onNext, onPrev, updateFormData, formDa
       }
       fetchMunicipios();
     } else {
-      setMunicipios([]); // Limpiar municipios si no hay estado seleccionado
-      setParroquias([]); // Limpiar parroquias también
+      setMunicipios([]);
+      setParroquias([]);
     }
   }, [formState.beneficiaryData.benf_estado]);
 
@@ -185,9 +185,14 @@ export default function BeneficiaryInfo({ onNext, onPrev, updateFormData, formDa
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateErrors()) {
-      updateFormData(formState);
+      updateFormData({ beneficiaryData: formState.beneficiaryData });
       onNext();
     }
+  };
+
+  const handlePrev = () => {
+    updateFormData({ beneficiaryData: formState.beneficiaryData });
+    onPrev();
   };
 
   return (
@@ -285,6 +290,15 @@ export default function BeneficiaryInfo({ onNext, onPrev, updateFormData, formDa
       )}
 
       <div className="grid grid-cols-2 gap-4">
+        <TextInput
+            id="benf_fec_nac"
+            name="benf_fec_nac"
+            label="Fecha de fundacion"
+            type="date"
+            value={formState.beneficiaryData.benf_fec_nac}
+            onChange={handleChange}
+            error={errors.beneficiaryDateOfBirth}
+        />
         <SelectInput
           id="benf_estado"
           name="benf_estado"
@@ -335,7 +349,7 @@ export default function BeneficiaryInfo({ onNext, onPrev, updateFormData, formDa
       <div className="flex justify-between">
         <button
           type="button"
-          onClick={onPrev}
+          onClick={handlePrev}
           className="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
           Atrás
