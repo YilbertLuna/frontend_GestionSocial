@@ -76,7 +76,7 @@ export default function Registro() {
       <div className="flex w-full max-w-4xl mx-auto bg-white shadow-md rounded-lg overflow-hidden p-11">
         <div className="text-lg font-semibold text-gray-800 w-full space-y-9">
           <DatosPersona persona={data.dataPerson[0]} />
-          <ListaTramites tramites={data.dataProcess.tramites} />
+          <ListaTramites tramites={data.dataProcess.tramites} idPerson={data.dataPerson[0].pers_id}/>
 
           <div className="flex justify-center items-center">
             <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Realizar otra solicitud</button>

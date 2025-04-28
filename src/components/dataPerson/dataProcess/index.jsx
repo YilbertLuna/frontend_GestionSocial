@@ -3,7 +3,7 @@
 import { useState } from "react";
 import TramiteItem from "../itemProcess";
 
-export default function ListaTramites({ tramites }) {
+export default function ListaTramites({ tramites, idPerson }) {
   const [expandedTramites, setExpandedTramites] = useState({});
 
   const toggleTramite = (tramiteId) => {
@@ -30,6 +30,7 @@ export default function ListaTramites({ tramites }) {
           <TramiteItem
             key={tramite.id_tramite}
             tramite={tramite}
+            idPerson= {idPerson}
             isExpanded={expandedTramites[tramite.id_tramite] || false}
             onToggle={() => toggleTramite(tramite.id_tramite)}
           />
