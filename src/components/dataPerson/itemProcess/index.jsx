@@ -1,4 +1,4 @@
-export default function TramiteItem({ tramite, isExpanded, onToggle }) {
+export default function TramiteItem({ tramite, isExpanded, onToggle, idPerson }) {
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     const options = { 
@@ -23,6 +23,33 @@ export default function TramiteItem({ tramite, isExpanded, onToggle }) {
         return "bg-gray-100 text-gray-800";
     }
   };
+
+  const handleDownloadPDF = async () => {
+    try {
+      const res = await fetch(`http://localhost:3030/api//generatePdf/${idPerson}/${tramite.id_tramite}`,{
+        method: "GET",
+        headers: {
+          "Content-Type": "application/pdf"
+        }})
+        if (!res.ok) {
+          throw new Error(`Error al descargar el PDF: ${res.status}`);
+        }
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+    
+        // Abrir el PDF en una nueva pestaña
+        const newTab = window.open();
+        newTab.location.href = url
+        newTab.document.title = `tramite_${tramite.nro_tramite}.pdf
+        `
+        // Revocar la URL después de un tiempo para liberar memoria
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+        }, 100);
+    } catch (error) {
+      console.error("Error al descargar el PDF:", error);
+    }
+  }
 
   return (
     <div className="border rounded-lg overflow-hidden">
@@ -133,7 +160,7 @@ export default function TramiteItem({ tramite, isExpanded, onToggle }) {
           </div>
           <div className="grid grid-cols-2 gap-4 mb-4">
             <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-xs">Editar tramite</button>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-xs">Imprimir tramite</button>
+            <button onClick={handleDownloadPDF} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-xs">Imprimir tramite</button>
           </div>
         </div>
       )}
