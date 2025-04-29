@@ -1,15 +1,15 @@
-import { useState } from "react"
+import { useState } from "react";
 import TextInput from "../TextInput";
 import SelectInput from "../SelectInput";
 
 export default function ApplicantInfo({ onNext, updateFormData, formData }) {
   const [formState, setFormState] = useState({
     dataAplicant: {
-      pers_nombres: formData.pers_nombres || "",
-      pers_apellidos: formData.pers_apellidos || "",
-      pers_document: formData.pers_document || "",
-      pers_cedula: formData.pers_cedula || "",
-      pers_fec_nac: formData.pers_fec_nac || "",
+      pers_nombres: formData.dataAplicant?.pers_nombres || "",
+      pers_apellidos: formData.dataAplicant?.pers_apellidos || "",
+      pers_document: formData.dataAplicant?.pers_document || "",
+      pers_cedula: formData.dataAplicant?.pers_cedula || "",
+      pers_fec_nac: formData.dataAplicant?.pers_fec_nac || "",
     },
   });
   const [errors, setErrors] = useState({});
@@ -40,8 +40,8 @@ export default function ApplicantInfo({ onNext, updateFormData, formData }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateErrors()) {
-      updateFormData(formState);
-      onNext();
+      updateFormData({ dataAplicant: formState.dataAplicant }); // Asegúrate de pasar un objeto válido
+      onNext(); // Avanza al siguiente paso
     }
   };
 

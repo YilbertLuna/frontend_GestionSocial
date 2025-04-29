@@ -7,13 +7,13 @@ import RadioGroup from "../RadioGroup";
 export default function LocationInfo({ onNext, onPrev, updateFormData, formData, setIsAplicantBeneficiary }) {
   const [formState, setFormState] = useState({
     dataLocation: {
-      estado_id: formData.estado_id || "",
-      municipio_id: formData.municipio_id || "",
-      parroquia_id: formData.parroquia_id || "",
-      Direccion: formData.Direccion || "",
-      TelefonoFijo: formData.TelefonoFijo || "",
-      TelefonoCelular: formData.TelefonoCelular || "",
-      Correo: formData.Correo || "",
+      estado_id: formData.dataLocation?.estado_id || "",
+      municipio_id: formData.dataLocation?.municipio_id || "",
+      parroquia_id: formData.dataLocation?.parroquia_id || "",
+      Direccion: formData.dataLocation?.Direccion || "",
+      TelefonoFijo: formData.dataLocation?.TelefonoFijo || "",
+      TelefonoCelular: formData.dataLocation?.TelefonoCelular || "",
+      Correo: formData.dataLocation?.Correo || "",
     },
     isAplicantBeneficiary: formData.isAplicantBeneficiary || "SI",
   });
@@ -28,19 +28,19 @@ export default function LocationInfo({ onNext, onPrev, updateFormData, formData,
     async function fetchEstados() {
       try {
         const res = await fetch("http://localhost:3030/api/estado", {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          });
-    
-          const data = await res.json();
-          if (res.ok) {
-            setEstados(data);
-          } else {
-            setEstados(null);
-          }
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          setEstados(data);
+        } else {
+          setEstados(null);
+        }
       } catch (error) {
         console.error("Error al cargar los estados:", error);
       }
@@ -53,22 +53,21 @@ export default function LocationInfo({ onNext, onPrev, updateFormData, formData,
     if (formState.dataLocation.estado_id) {
       async function fetchMunicipios() {
         try {
-            const res = await fetch("http://localhost:3030/api/municipio", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({ id_estado: formState.dataLocation.estado_id }),
-  
-            });
-        
-            const data = await res.json();
-            if (res.ok) {
-                setMunicipios(data);
-            } else {
-                setMunicipios(null);
-            }
+          const res = await fetch("http://localhost:3030/api/municipio", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ id_estado: formState.dataLocation.estado_id }),
+          });
+
+          const data = await res.json();
+          if (res.ok) {
+            setMunicipios(data);
+          } else {
+            setMunicipios(null);
+          }
         } catch (error) {
           console.error("Error al cargar los municipios:", error);
         }
@@ -82,22 +81,24 @@ export default function LocationInfo({ onNext, onPrev, updateFormData, formData,
     if (formState.dataLocation.municipio_id) {
       async function fetchParroquias() {
         try {
-            const res = await fetch("http://localhost:3030/api/parroquia", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({ id_estado: formState.dataLocation.estado_id, id_municipio: formState.dataLocation.municipio_id }),
-  
-            });
-        
-            const data = await res.json();
-            if (res.ok) {
-                setParroquias(data);
-            } else {
-                setParroquias(null);
-            }
+          const res = await fetch("http://localhost:3030/api/parroquia", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              id_estado: formState.dataLocation.estado_id,
+              id_municipio: formState.dataLocation.municipio_id,
+            }),
+          });
+
+          const data = await res.json();
+          if (res.ok) {
+            setParroquias(data);
+          } else {
+            setParroquias(null);
+          }
         } catch (error) {
           console.error("Error al cargar las parroquias:", error);
         }
@@ -159,10 +160,21 @@ export default function LocationInfo({ onNext, onPrev, updateFormData, formData,
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateErrors()) {
-      updateFormData(formState);
+      updateFormData({
+        dataLocation: formState.dataLocation,
+        isAplicantBeneficiary: formState.isAplicantBeneficiary,
+      });
       setIsAplicantBeneficiary(formState.isAplicantBeneficiary === "SI");
       onNext();
     }
+  };
+
+  const handlePrev = () => {
+    updateFormData({
+      dataLocation: formState.dataLocation,
+      isAplicantBeneficiary: formState.isAplicantBeneficiary,
+    });
+    onPrev();
   };
 
   return (
@@ -248,9 +260,7 @@ export default function LocationInfo({ onNext, onPrev, updateFormData, formData,
         error={errors.contacto}
       />
 
-        {/* {errors && <p className="text-red-500 text-xs">{errors}</p>} */}
-
-        <RadioGroup
+      <RadioGroup
         label="¿Es el solicitante también el beneficiario?"
         name="isAplicantBeneficiary"
         value={formState.isAplicantBeneficiary}
@@ -259,11 +269,11 @@ export default function LocationInfo({ onNext, onPrev, updateFormData, formData,
             { value: "SI", label: "Sí" },
             { value: "NO", label: "No" },
         ]}
-        />
+      />
       <div className="flex justify-between">
         <button
           type="button"
-          onClick={onPrev}
+          onClick={handlePrev}
           className="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
           Atrás

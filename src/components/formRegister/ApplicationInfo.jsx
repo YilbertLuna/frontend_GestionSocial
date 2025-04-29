@@ -6,20 +6,21 @@ import SelectInput from "../SelectInput";
 export default function ApplicationInfo({ onPrev, updateFormData, formData, onSubmit }) {
   const [formState, setFormState] = useState({
     aplicationData: {
-      description: formData.description || "",
-      referido: formData.referido || "",
-      monto: formData.monto || "",
+      description: formData.aplicationData?.description || "",
+      referido: formData.aplicationData?.referido || "",
+      monto: formData.aplicationData?.monto || "",
     },
-    requeriments: {},
+    requeriments: formData.requeriments || {},
   });
+
   const [readyToSubmit, setReadyToSubmit] = useState(false);
   const [user, setUser] = useState(null);
   const [area, setArea] = useState(null);
   const [help, setHelp] = useState(null);
   const [requeriments, setRequeriments] = useState(null);
   const [procedencia, setProcedencia] = useState(null);
-  const [selectArea, setSelectArea] = useState({ id_area: "" });
-  const [selectHelp, setSelectHelp] = useState({ id_ayuda: "" });
+  const [selectArea, setSelectArea] = useState({ id_area: formData.aplicationData?.id_area || "" });
+  const [selectHelp, setSelectHelp] = useState({ id_ayuda: formData.aplicationData?.id_ayuda || "" });
   const [errors, setErrors] = useState({});
 
   const handleAreaChange = (e) => {
@@ -56,27 +57,27 @@ export default function ApplicationInfo({ onPrev, updateFormData, formData, onSu
 
   const validateErrors = () => {
     const newErrors = {};
-  
+
     if (!selectArea.id_area || selectArea.id_area.trim() === "") {
       newErrors.area = "Debe seleccionar un área.";
     }
-  
+
     if (!selectHelp.id_ayuda || selectHelp.id_ayuda.trim() === "") {
       newErrors.assistanceType = "Debe seleccionar un tipo de ayuda.";
     }
-  
+
     if (!formState.aplicationData.referido || formState.aplicationData.referido.trim() === "") {
       newErrors.referido = "Debe indicar si la persona viene referida.";
     }
-  
+
     if (!formState.aplicationData.monto || isNaN(formState.aplicationData.monto) || parseFloat(formState.aplicationData.monto) <= 0) {
       newErrors.monto = "Debe ingresar un monto válido.";
     }
-  
+
     if (!formState.aplicationData.description || formState.aplicationData.description.trim() === "") {
       newErrors.description = "Debe proporcionar una descripción de la ayuda.";
     }
-  
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -231,6 +232,8 @@ export default function ApplicationInfo({ onPrev, updateFormData, formData, onSu
         aplicationData: {
           ...formState.aplicationData,
           monto: parseFloat(formState.aplicationData.monto),
+          id_area: selectArea.id_area,
+          id_ayuda: selectHelp.id_ayuda,
         },
         requeriments: processedRequeriments,
       };
@@ -238,6 +241,18 @@ export default function ApplicationInfo({ onPrev, updateFormData, formData, onSu
       updateFormData(updatedFormState);
       setReadyToSubmit(true);
     }
+  };
+
+  const handlePrev = () => {
+    updateFormData({
+      ...formState,
+      aplicationData: {
+        ...formState.aplicationData,
+        id_area: selectArea.id_area,
+        id_ayuda: selectHelp.id_ayuda,
+      },
+    });
+    onPrev();
   };
 
   useEffect(() => {
@@ -386,7 +401,7 @@ export default function ApplicationInfo({ onPrev, updateFormData, formData, onSu
       <div className="flex justify-between">
         <button
           type="button"
-          onClick={onPrev}
+          onClick={handlePrev}
           className="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
           Atrás
