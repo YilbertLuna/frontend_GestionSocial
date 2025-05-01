@@ -30,7 +30,9 @@ export default function TramiteItem({ tramite, isExpanded, onToggle, idPerson })
         method: "GET",
         headers: {
           "Content-Type": "application/pdf"
-        }})
+        },
+        credentials: "include",
+      })
         if (!res.ok) {
           throw new Error(`Error al descargar el PDF: ${res.status}`);
         }

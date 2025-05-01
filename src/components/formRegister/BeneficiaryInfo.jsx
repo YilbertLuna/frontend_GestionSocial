@@ -256,6 +256,15 @@ export default function BeneficiaryInfo({ onNext, onPrev, updateFormData, formDa
             onChange={handleChange}
             error={errors.legalRepresentative}
           />
+          <TextInput
+            id="benf_fec_nac"
+            name="benf_fec_nac"
+            label="Fecha de fundacion"
+            type="date"
+            value={formState.beneficiaryData.benf_fec_nac}
+            onChange={handleChange}
+            error={errors.beneficiaryDateOfBirth}
+          />
         </div>
       ) : (
         <>
@@ -290,15 +299,6 @@ export default function BeneficiaryInfo({ onNext, onPrev, updateFormData, formDa
       )}
 
       <div className="grid grid-cols-2 gap-4">
-        <TextInput
-            id="benf_fec_nac"
-            name="benf_fec_nac"
-            label="Fecha de fundacion"
-            type="date"
-            value={formState.beneficiaryData.benf_fec_nac}
-            onChange={handleChange}
-            error={errors.beneficiaryDateOfBirth}
-        />
         <SelectInput
           id="benf_estado"
           name="benf_estado"
