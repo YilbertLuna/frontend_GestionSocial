@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import DatosPersona from "@/components/dataPerson/dataPerson";
@@ -79,7 +80,9 @@ export default function Registro() {
           <ListaTramites tramites={data.dataProcess.tramites} idPerson={data.dataPerson[0].pers_id}/>
 
           <div className="flex justify-center items-center">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Realizar otra solicitud</button>
+            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+              <Link href={`/registro/nueva-solicitud/${data.dataPerson[0].pers_id}`}>Realizar otra solicitud</Link>
+            </button>
           </div>
         </div>
       </div>

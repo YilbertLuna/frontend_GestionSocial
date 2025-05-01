@@ -39,8 +39,6 @@ export default function ApplicationForm() {
       const updatedData = { ...prevData, ...newData }
       return updatedData;
     });
-
-    console.log(formData)
   };
 
   const handleSubmit = async () => {
