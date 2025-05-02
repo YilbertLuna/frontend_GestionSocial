@@ -6,6 +6,7 @@ import ButtomLogout from "../buttomLogout";
 
 export default function Navbar(){
     const [user, setUser] = useState(null)
+    const [tooltip, setTooltip] = useState(false);
 
     useEffect(() => {
         async function getInfo() {
@@ -55,7 +56,18 @@ export default function Navbar(){
                             </li>
                         </ul>
                     </li>
-                    <li className="px-4"><Link href="/">Estudio socioeconómico</Link></li>
+                    <li
+                        className="px-4 relative"
+                        onMouseEnter={() => setTooltip(true)} // Mostrar tooltip al pasar el cursor
+                        onMouseLeave={() => setTooltip(false)} // Ocultar tooltip al salir
+                    >
+                        Estudio socioeconómico
+                        {tooltip && (
+                            <span className="absolute left-0 top-full mt-1 bg-gray-200 text-gray-700 text-sm px-2 py-1 rounded shadow-md">
+                                En desarrollo...
+                            </span>
+                        )}
+                    </li>
                     <li className="px-4"><Link href="/">Reportes</Link></li>
                 </ul>
                 <ul className="flex flex-row divide-x-2 divide-solid divide-black">
