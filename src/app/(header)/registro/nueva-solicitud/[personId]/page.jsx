@@ -3,10 +3,16 @@
 import NewRequestForm from "@/components/formNewProcess";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import ModalError from "@/components/modal/ModalError";
+import ModalSucess from "@/components/modal/modalRegisterSucess";
+import { useRouter } from "next/navigation"
 
 export default function NuevaSolicitud() {
   const { personId } = useParams();
   const [initialData, setInitialData] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("")
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const router = useRouter()
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
@@ -43,6 +49,11 @@ export default function NuevaSolicitud() {
     return <p>Cargando datos...</p>;
   }
 
+  const closeModal = () => {
+    setIsModalOpen(false)
+    router.push(`/registro/persona/${initialData.dataAplicant.pers_cedula}`)
+  }
+
   const handleSubmit = async (formData) => {
       const response = await fetch('http://localhost:3030/api/newProcess', {
         method: "POST",
@@ -53,8 +64,13 @@ export default function NuevaSolicitud() {
         body: JSON.stringify(formData),
       });
 
-      if(response.ok) alert('el nuevo tramite se registro correctamente')
-      else alert('error al guardar la solicitud')
+      if(response.ok) {
+        setIsModalOpen(true)
+        setErrorMessage("")
+      } else {
+        const errorData = await response.json()
+        setErrorMessage(errorData.message || "Error al registrar")
+      }
   };
 
   return (
@@ -117,6 +133,15 @@ export default function NuevaSolicitud() {
                 </div>
             </div>
         </div>
+        {isModalOpen && (
+          <ModalSucess closeModal={closeModal} title={"Registro completado"} message={"El registro se ha completado con éxito."}/>
+        )}
+        {errorMessage && (
+          <ModalError
+            errorMessage={errorMessage}
+            closeModal={() => setErrorMessage("")}
+          />
+        )}
     </div>
   );
 }
