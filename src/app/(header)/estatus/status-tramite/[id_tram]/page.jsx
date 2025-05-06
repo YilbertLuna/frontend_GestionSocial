@@ -16,6 +16,7 @@ export default function UpdateTramite() {
   const [observacion, setObservacion] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [errors, setErrors] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [processUpdate, setProcessUpdate] = useState({});
   const router = useRouter();
@@ -110,9 +111,23 @@ export default function UpdateTramite() {
     }
   }, [selectStatus, observacion, data]);
 
+  const validateErrors = () => {
+    const newErrors = {};
+  
+    if (!selectStatus || selectStatus.trim() === "") {
+      newErrors.selectStatus = "Debe seleccionar un estado.";
+    }
+  
+    if (!observacion || observacion.trim() === "") {
+      newErrors.observacion = "Debe proporcionar una observación.";
+    }
+  
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async () => {
-    if (!selectStatus || !observacion) {
-      setError("Por favor, complete todos los campos.");
+    if (!validateErrors()) {
       return;
     }
   
@@ -169,7 +184,7 @@ export default function UpdateTramite() {
 
   return (
     <div className="container mx-auto py-8 space-y-10">
-        <h1 className="text-center text-4xl font-bold text-white">Actualización del Trámite</h1>
+        <h1 className="text-center text-4xl font-bold text-white">Actualización de estatus del Trámite</h1>
 
         <div className="flex w-full max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden p-8">
             <div className="text-lg font-semibold text-gray-800 w-full space-y-8">
@@ -232,9 +247,15 @@ export default function UpdateTramite() {
                             <span>{data[0]?.area_descripcion || "N/A"}</span>
                         </p>
                         <p className="flex items-start">
-                            <span className="font-medium text-gray-600 w-1/3">Descripción:</span>
-                            <span className="text-gray-800 max-h-24 overflow-y-auto break-words p-2 w-2/3 text-wrap">
-                                {data[0]?.tram_descripcion || "N/A"}
+                          <span className="font-medium text-gray-600 w-1/3">Descripción:</span>
+                            <span
+                              className={`text-gray-800 ${
+                                (data[0]?.tram_descripcion || "").length > 50
+                                  ? "max-h-24 overflow-y-auto break-words p-2 w-2/3 text-wrap"
+                                  : "w-2/3 text-right"
+                              }`}
+                            >
+                              {data[0]?.tram_descripcion || "N/A"}
                             </span>
                         </p>
                     </div>
@@ -246,8 +267,9 @@ export default function UpdateTramite() {
                   }} 
                   className="bg-gray-50 border border-gray-200 rounded-lg p-6 shadow-md space-y-4"
                 >
-                  <h3 className="text-lg font-semibold text-gray-700 mb-4">Actualizar estado del trámite</h3>
-                  <div className="space-y-2">
+                <h3 className="text-lg font-semibold text-gray-700 mb-4">Actualizar estado del trámite</h3>
+                <div className="space-y-2">
+                  <div>
                     <SelectInput 
                       id="selectStatus"
                       name="selectStatus"
@@ -262,7 +284,12 @@ export default function UpdateTramite() {
                         : []
                       }
                     />
-                
+                    {errors.selectStatus && (
+                      <p className="text-red-500 text-sm mt-1">{errors.selectStatus}</p>
+                    )}
+                  </div>
+
+                  <div>
                     <TextAreaInput 
                       id="estatusObservacion"
                       name="estatusObservacion"
@@ -273,14 +300,18 @@ export default function UpdateTramite() {
                         setObservacion(value);
                       }}
                     />
+                    {errors.observacion && (
+                      <p className="text-red-500 text-sm mt-1">{errors.observacion}</p>
+                    )}
                   </div>
-                  <button 
-                    type="submit" 
-                    className="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
-                  >
-                    Actualizar estado
-                  </button>
-                </form>
+                </div>
+                <button 
+                  type="submit" 
+                  className="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
+                >
+                  Actualizar estado
+                </button>
+              </form>
             </div>
         </div>
         {isModalOpen && (
