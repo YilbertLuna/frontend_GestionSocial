@@ -4,11 +4,15 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Loading from "@/components/loading";
 import { useRouter } from "next/navigation";
+import ModalSucess from "@/components/modal/modalRegisterSucess";
+import ModalError from "@/components/modal/ModalError";
 
 export default function EditarTramite() {
   const { id_tramite } = useParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
   const [noRequeriments, setNoRequeriments] = useState(null);
@@ -167,31 +171,64 @@ export default function EditarTramite() {
   
   const handleSubmit = async () => {
   // Procesar los requisitos seleccionados
-  const selectedRequeriments = Object.values(formState.requeriments || {}).map((req) => ({
-    ...req,
-    estatus: "C", // Seleccionados como consignados
-  }));
-
-  // Procesar los requisitos no seleccionados
-  const unselectedRequeriments = (noRequeriments || [])
-    .filter((req) => !(formState.requeriments || {})[req.requ_id])
-    .map((req) => ({
+    const selectedRequeriments = Object.values(formState.requeriments || {}).map((req) => ({
       ...req,
-      estatus: "U",
-      depe_id: user.dependencia_id || null,
-      id_area: data[0].areas_area_id || null,
-      serv_id: data[0].serv_id || null,
+      estatus: "C", // Seleccionados como consignados
     }));
 
-  // Combinar ambos conjuntos de requisitos
-  const allRequeriments = [...selectedRequeriments, ...unselectedRequeriments];
+  // Procesar los requisitos no seleccionados
+    const unselectedRequeriments = (noRequeriments || [])
+      .filter((req) => !(formState.requeriments || {})[req.requ_id])
+      .map((req) => ({
+        ...req,
+        estatus: "U",
+        depe_id: user.dependencia_id || null,
+        id_area: data[0].areas_area_id || null,
+        serv_id: data[0].serv_id || null,
+      }));
 
-  const updatedFormState = {
-    requeriments: allRequeriments,
-    id_tramite: data[0]?.id_tramite || null,
-  };
+  // Combinar ambos conjuntos de requisitos
+    const allRequeriments = [...selectedRequeriments, ...unselectedRequeriments];
+
+    const updatedFormState = {
+      requeriments: allRequeriments,
+      id_tramite: data[0]?.id_tramite || null,
+    };
+
+
     console.log(updatedFormState);
+    try {
+      const response = await fetch(`http://localhost:3030/api/updateProcess`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(updatedFormState),
+      })
+
+      console.log(response);
+      console.log({
+        requeriments: updatedFormState,
+        // id_tramite: data[0]?.id_tramite,
+      })
+
+      if (response.ok) {
+        setIsModalOpen(true)
+        setErrorMessage("")
+      } else {
+        const errorData = await response.json()
+        setErrorMessage(errorData.message || "Error al registrar")
+      }
+    } catch (error) {
+      alert("Error de red")
+    }
   };
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    router.back()
+  }
 
   if (loading) {
     return <Loading text="Cargando datos del trámite..." />;
@@ -351,6 +388,15 @@ export default function EditarTramite() {
           </form>
         </div>
       </div>
+      {isModalOpen && (
+        <ModalSucess closeModal={closeModal} title={"Registro completado"} message={"El registro se ha completado con éxito."}/>
+      )}
+      {errorMessage && (
+        <ModalError
+          errorMessage={errorMessage}
+          closeModal={() => setErrorMessage("")}
+        />
+      )}
     </div>
   );
 }
