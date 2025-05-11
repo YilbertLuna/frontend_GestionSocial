@@ -36,7 +36,7 @@ export default function TramiteItem({ tramite, isExpanded, onToggle, idPerson })
         credentials: "include",
       })
         if (!res.ok) {
-          throw new Error(`Error al descargar el PDF: ${res.status}`);
+          alert(`Error al descargar el PDF: ${res.status}`);
         }
         const blob = await res.blob();
         const url = window.URL.createObjectURL(blob);
