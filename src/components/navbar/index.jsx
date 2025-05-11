@@ -68,7 +68,14 @@ export default function Navbar(){
                             </span>
                         )}
                     </li>
-                    <li className="px-4"><Link href="/">Reportes</Link></li>
+                    <li className="px-4 relative group">
+                        <span className="flex flex-row justify-center items-center gap-2 cursor-pointer">Reportes <TiArrowSortedDown className="text-blue-500" /></span>
+                        <ul className="hidden group-hover:block absolute bg-white shadow-md py-2 w-48 -left-6 rounded-b-md">
+                            <li className="px-4 py-2 hover:text-blue-500">
+                                <Link href="/reportes/solicitudes-aprobradas">Generar lista de solicitudes aprobadas</Link>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
                 <ul className="flex flex-row divide-x-2 divide-solid divide-black">
                     <li className="w-auto px-2 text-right"><Link href="/">{user?.nombre}</Link></li>
