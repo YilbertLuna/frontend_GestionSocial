@@ -32,7 +32,7 @@ export default function SelectTramites() {
             }
      
             try {
-                const response = await fetch("http://localhost:3030/api/selectProcess", {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API}selectProcess`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

@@ -27,7 +27,7 @@ export default function LocationInfo({ onNext, onPrev, updateFormData, formData,
   useEffect(() => {
     async function fetchEstados() {
       try {
-        const res = await fetch("http://localhost:3030/api/estado", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API}estado`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -53,7 +53,7 @@ export default function LocationInfo({ onNext, onPrev, updateFormData, formData,
     if (formState.dataLocation.estado_id) {
       async function fetchMunicipios() {
         try {
-          const res = await fetch("http://localhost:3030/api/municipio", {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API}municipio`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -81,7 +81,7 @@ export default function LocationInfo({ onNext, onPrev, updateFormData, formData,
     if (formState.dataLocation.municipio_id) {
       async function fetchParroquias() {
         try {
-          const res = await fetch("http://localhost:3030/api/parroquia", {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API}parroquia`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

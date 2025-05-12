@@ -18,7 +18,7 @@ export default function Registro() {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:3030/api/aplicantDataInfo/${id_person}`,
+          `${process.env.NEXT_PUBLIC_API}aplicantDataInfo/${id_person}`,
           {
             method: "GET",
             headers: {

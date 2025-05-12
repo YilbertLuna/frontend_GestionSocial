@@ -10,7 +10,7 @@ export default function FormLoginUser() {
     const router = useRouter()
 
     const onSubmit = handleSubmit( async(data) => {
-        const res = await fetch(`http://localhost:3030/api/login`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API}login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

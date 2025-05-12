@@ -36,7 +36,7 @@ export default function UpdateTramite() {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:3030/api/dataProcess/${id_tram}`,
+          `${process.env.NEXT_PUBLIC_API}dataProcess/${id_tram}`,
           {
             method: "GET",
             headers: {
@@ -69,7 +69,7 @@ export default function UpdateTramite() {
         try {
           setLoading(true);
           const response = await fetch(
-            `http://localhost:3030/api/selectStatus`,
+            `${process.env.NEXT_PUBLIC_API}selectStatus`,
             {
               method: "GET",
               headers: {
@@ -132,7 +132,7 @@ export default function UpdateTramite() {
     }
   
     try {
-      const response = await fetch("http://localhost:3030/api/changeStatus", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}changeStatus`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

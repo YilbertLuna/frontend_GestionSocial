@@ -43,7 +43,7 @@ export default function ApplicationForm() {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch("http://localhost:3030/api/newRegister", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}newRegister`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

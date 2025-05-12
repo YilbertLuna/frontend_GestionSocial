@@ -28,7 +28,7 @@ export default function TramiteItem({ tramite, isExpanded, onToggle, idPerson })
 
   const handleDownloadPDF = async () => {
     try {
-      const res = await fetch(`http://localhost:3030/api//generatePdf/${idPerson}/${tramite.id_tramite}`,{
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API}generatePdf/${idPerson}/${tramite.id_tramite}`,{
         method: "GET",
         headers: {
           "Content-Type": "application/pdf"

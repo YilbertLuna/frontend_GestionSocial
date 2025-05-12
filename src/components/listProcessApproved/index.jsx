@@ -13,7 +13,7 @@ export default function ListProcessApproved() {
     useEffect(() => {
         const listApproved = async () => {
             try {
-                const response = await fetch(`http://localhost:3030/api/listProcessApproved?page=${page}`, {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API}listProcessApproved?page=${page}`, {
                   method: "GET",
                   headers: {
                     "Content-Type": "application/json",

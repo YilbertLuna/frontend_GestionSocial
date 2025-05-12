@@ -33,7 +33,7 @@ export default function SearchPersons() {
             }
         
             try {
-                const response = await fetch("http://localhost:3030/api/searchPersons", {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API}searchPersons`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
