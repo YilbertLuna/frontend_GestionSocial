@@ -10,7 +10,7 @@ export default function Navbar(){
 
     useEffect(() => {
         async function getInfo() {
-            const res = await fetch('http://localhost:3030/api/home', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}home`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

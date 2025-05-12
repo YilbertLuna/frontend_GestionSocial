@@ -14,7 +14,7 @@ export default function SearchProcess() {
       async function getDataTramite() {
          try {
             setLoading(true);
-            const response = await fetch(`http://localhost:3030/api/showDataProcess/${id_tram}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API}showDataProcess/${id_tram}`, {
                method: "GET",
                headers: {
                   "Content-Type": "application/json",

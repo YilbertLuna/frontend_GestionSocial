@@ -32,7 +32,7 @@ export default function SearchTramites() {
             }
      
             try {
-                const response = await fetch("http://localhost:3030/api/searchTramite", {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API}searchTramite`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

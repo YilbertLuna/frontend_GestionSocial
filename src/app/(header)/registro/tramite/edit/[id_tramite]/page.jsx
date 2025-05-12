@@ -34,7 +34,7 @@ export default function EditarTramite() {
 
   useEffect(() => {
     async function getInfo() {
-      const res = await fetch(`http://localhost:3030/api/requisitosNoConsignados/${id_tramite}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API}requisitosNoConsignados/${id_tramite}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -55,7 +55,7 @@ export default function EditarTramite() {
 
   useEffect(() => {
     async function getInfo() {
-      const res = await fetch(`http://localhost:3030/api/requisitosConsignados/${id_tramite}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API}requisitosConsignados/${id_tramite}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -76,7 +76,7 @@ export default function EditarTramite() {
 
   useEffect(() => {
     async function getInfo() {
-      const res = await fetch("http://localhost:3030/api/home", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API}home`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -100,7 +100,7 @@ export default function EditarTramite() {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:3030/api/dataProcess/${id_tramite}`,
+          `${process.env.NEXT_PUBLIC_API}dataProcess/${id_tramite}`,
           {
             method: "GET",
             headers: {
@@ -196,21 +196,14 @@ export default function EditarTramite() {
     };
 
 
-    console.log(updatedFormState);
     try {
-      const response = await fetch(`http://localhost:3030/api/updateProcess`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}updateProcess`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
         body: JSON.stringify(updatedFormState),
-      })
-
-      console.log(response);
-      console.log({
-        requeriments: updatedFormState,
-        // id_tramite: data[0]?.id_tramite,
       })
 
       if (response.ok) {

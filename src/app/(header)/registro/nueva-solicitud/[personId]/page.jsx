@@ -26,7 +26,7 @@ export default function NuevaSolicitud() {
 
   useEffect(() => {
     async function fetchPersona() {
-      const response = await fetch(`http://localhost:3030/api/getDataPerson/${personId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}getDataPerson/${personId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -55,7 +55,7 @@ export default function NuevaSolicitud() {
   }
 
   const handleSubmit = async (formData) => {
-      const response = await fetch('http://localhost:3030/api/newProcess', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}newProcess`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

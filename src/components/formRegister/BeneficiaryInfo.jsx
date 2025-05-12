@@ -30,7 +30,7 @@ export default function BeneficiaryInfo({ onNext, onPrev, updateFormData, formDa
   useEffect(() => {
     async function fetchEstados() {
       try {
-        const res = await fetch('http://localhost:3030/api/estado', {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API}estado`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export default function BeneficiaryInfo({ onNext, onPrev, updateFormData, formDa
     if (formState.beneficiaryData.benf_estado) {
       async function fetchMunicipios() {
         try {
-          const res = await fetch('http://localhost:3030/api/municipio', {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API}municipio`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ export default function BeneficiaryInfo({ onNext, onPrev, updateFormData, formDa
     if (formState.beneficiaryData.benf_municipio) {
       async function fetchParroquias() {
         try {
-          const res = await fetch('http://localhost:3030/api/parroquia', {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API}parroquia`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

@@ -84,7 +84,7 @@ export default function ApplicationInfo({ onPrev, updateFormData, formData, onSu
 
   useEffect(() => {
     async function getInfo() {
-      const res = await fetch("http://localhost:3030/api/home", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API}home`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +105,7 @@ export default function ApplicationInfo({ onPrev, updateFormData, formData, onSu
 
   useEffect(() => {
     async function getArea() {
-      const res = await fetch("http://localhost:3030/api/selectArea", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API}selectArea`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -128,7 +128,7 @@ export default function ApplicationInfo({ onPrev, updateFormData, formData, onSu
     if (selectArea.id_area && selectArea.id_area.trim() !== "") {
       async function getHelp() {
         try {
-          const res = await fetch("http://localhost:3030/api/selectService", {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API}selectService`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -157,7 +157,7 @@ export default function ApplicationInfo({ onPrev, updateFormData, formData, onSu
   useEffect(() => {
     async function getProcedencia() {
       try {
-        const res = await fetch("http://localhost:3030/api/referido", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API}referido`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -188,7 +188,7 @@ export default function ApplicationInfo({ onPrev, updateFormData, formData, onSu
     ) {
       async function getRequeriments() {
         try {
-          const res = await fetch("http://localhost:3030/api/requeriments", {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API}requeriments`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
